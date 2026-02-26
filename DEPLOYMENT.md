@@ -51,7 +51,7 @@ git push -u origin main
    - Branch: `main`
    - Root Directory: leave blank
    - Runtime: `Node`
-   - Build Command: `npm install && npm run build`
+   - Build Command: `npm install && npm run build && node dist/migrate.js`
    - Start Command: `npm start`
    - Plan: Free (or paid for production)
 
