@@ -28,7 +28,7 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
     let contacts: Contact[] = [];
     
     if (email && phoneNumber) {
-      const result = await client.query<Contact>(
+      const result = await client.query(
         `SELECT * FROM Contact 
          WHERE (email = $1 OR phoneNumber = $2) AND deletedAt IS NULL
          ORDER BY createdAt ASC`,
@@ -36,13 +36,13 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
       );
       contacts = result.rows;
     } else if (email) {
-      const result = await client.query<Contact>(
+      const result = await client.query(
         `SELECT * FROM Contact WHERE email = $1 AND deletedAt IS NULL ORDER BY createdAt ASC`,
         [email]
       );
       contacts = result.rows;
     } else if (phoneNumber) {
-      const result = await client.query<Contact>(
+      const result = await client.query(
         `SELECT * FROM Contact WHERE phoneNumber = $1 AND deletedAt IS NULL ORDER BY createdAt ASC`,
         [phoneNumber]
       );
@@ -50,7 +50,7 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
     }
 
     if (contacts.length === 0) {
-      const result = await client.query<Contact>(
+      const result = await client.query(
         `INSERT INTO Contact (phoneNumber, email, linkedId, linkPrecedence, createdAt, updatedAt)
          VALUES ($1, $2, NULL, 'primary', NOW(), NOW())
          RETURNING *`,
@@ -85,7 +85,7 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
       const hasNewInfo = (email && !emailMatch) || (phoneNumber && !phoneMatch);
       
       if (hasNewInfo) {
-        const result = await client.query<Contact>(
+        const result = await client.query(
           `INSERT INTO Contact (phoneNumber, email, linkedId, linkPrecedence, createdAt, updatedAt)
            VALUES ($1, $2, $3, 'secondary', NOW(), NOW())
            RETURNING *`,
@@ -149,7 +149,7 @@ const getAllLinkedContacts = async (client: any, contacts: Contact[]): Promise<C
   }
 
   for (const primaryId of primaryIds) {
-    const result = await client.query<Contact>(
+    const result = await client.query(
       `SELECT * FROM Contact WHERE (id = $1 OR linkedId = $1) AND deletedAt IS NULL ORDER BY createdAt ASC`,
       [primaryId]
     );
