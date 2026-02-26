@@ -24,13 +24,13 @@ export const initDatabase = async () => {
     await client.query(`
       CREATE TABLE IF NOT EXISTS Contact (
         id SERIAL PRIMARY KEY,
-        phoneNumber VARCHAR(255),
+        "phoneNumber" VARCHAR(255),
         email VARCHAR(255),
-        linkedId INTEGER REFERENCES Contact(id),
-        linkPrecedence VARCHAR(20) NOT NULL CHECK (linkPrecedence IN ('primary', 'secondary')),
-        createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
-        updatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
-        deletedAt TIMESTAMP
+        "linkedId" INTEGER REFERENCES Contact(id),
+        "linkPrecedence" VARCHAR(20) NOT NULL CHECK ("linkPrecedence" IN ('primary', 'secondary')),
+        "createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+        "updatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+        "deletedAt" TIMESTAMP
       )
     `);
     
@@ -39,7 +39,7 @@ export const initDatabase = async () => {
     `);
     
     await client.query(`
-      CREATE INDEX IF NOT EXISTS idx_contact_phone ON Contact(phoneNumber) WHERE phoneNumber IS NOT NULL;
+      CREATE INDEX IF NOT EXISTS idx_contact_phone ON Contact("phoneNumber") WHERE "phoneNumber" IS NOT NULL;
     `);
   } finally {
     client.release();

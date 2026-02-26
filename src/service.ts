@@ -30,20 +30,20 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
     if (email && phoneNumber) {
       const result = await client.query(
         `SELECT * FROM Contact 
-         WHERE (email = $1 OR phoneNumber = $2) AND deletedAt IS NULL
-         ORDER BY createdAt ASC`,
+         WHERE (email = $1 OR "phoneNumber" = $2) AND "deletedAt" IS NULL
+         ORDER BY "createdAt" ASC`,
         [email, phoneNumber]
       );
       contacts = result.rows;
     } else if (email) {
       const result = await client.query(
-        `SELECT * FROM Contact WHERE email = $1 AND deletedAt IS NULL ORDER BY createdAt ASC`,
+        `SELECT * FROM Contact WHERE email = $1 AND "deletedAt" IS NULL ORDER BY "createdAt" ASC`,
         [email]
       );
       contacts = result.rows;
     } else if (phoneNumber) {
       const result = await client.query(
-        `SELECT * FROM Contact WHERE phoneNumber = $1 AND deletedAt IS NULL ORDER BY createdAt ASC`,
+        `SELECT * FROM Contact WHERE "phoneNumber" = $1 AND "deletedAt" IS NULL ORDER BY "createdAt" ASC`,
         [phoneNumber]
       );
       contacts = result.rows;
@@ -51,7 +51,7 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
 
     if (contacts.length === 0) {
       const result = await client.query(
-        `INSERT INTO Contact (phoneNumber, email, linkedId, linkPrecedence, createdAt, updatedAt)
+        `INSERT INTO Contact ("phoneNumber", email, "linkedId", "linkPrecedence", "createdAt", "updatedAt")
          VALUES ($1, $2, NULL, 'primary', NOW(), NOW())
          RETURNING *`,
         [phoneNumber || null, email || null]
@@ -86,7 +86,7 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
       
       if (hasNewInfo) {
         const result = await client.query(
-          `INSERT INTO Contact (phoneNumber, email, linkedId, linkPrecedence, createdAt, updatedAt)
+          `INSERT INTO Contact ("phoneNumber", email, "linkedId", "linkPrecedence", "createdAt", "updatedAt")
            VALUES ($1, $2, $3, 'secondary', NOW(), NOW())
            RETURNING *`,
           [phoneNumber || null, email || null, primaryContact.id]
@@ -101,14 +101,14 @@ export const identifyContact = async (req: IdentifyRequest): Promise<IdentifyRes
 
     for (const contact of primaryContactsToConvert) {
       await client.query(
-        `UPDATE Contact SET linkedId = $1, linkPrecedence = 'secondary', updatedAt = NOW()
+        `UPDATE Contact SET "linkedId" = $1, "linkPrecedence" = 'secondary', "updatedAt" = NOW()
          WHERE id = $2`,
         [primaryContact.id, contact.id]
       );
       
       await client.query(
-        `UPDATE Contact SET linkedId = $1, updatedAt = NOW()
-         WHERE linkedId = $2`,
+        `UPDATE Contact SET "linkedId" = $1, "updatedAt" = NOW()
+         WHERE "linkedId" = $2`,
         [primaryContact.id, contact.id]
       );
       
@@ -150,7 +150,7 @@ const getAllLinkedContacts = async (client: any, contacts: Contact[]): Promise<C
 
   for (const primaryId of primaryIds) {
     const result = await client.query(
-      `SELECT * FROM Contact WHERE (id = $1 OR linkedId = $1) AND deletedAt IS NULL ORDER BY createdAt ASC`,
+      `SELECT * FROM Contact WHERE (id = $1 OR "linkedId" = $1) AND "deletedAt" IS NULL ORDER BY "createdAt" ASC`,
       [primaryId]
     );
     
