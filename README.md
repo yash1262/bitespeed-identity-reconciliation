@@ -98,7 +98,11 @@ CREATE TABLE Contact (
 
 ## Deployment
 
-The service is deployed at: https://bitespeed-identity-service-dxom.onrender.com
+The service is deployed at: **https://bitespeed-identity-service-dxom.onrender.com**
+
+### Live Endpoint
+
+**POST** `https://bitespeed-identity-service-dxom.onrender.com/identify`
 
 ## Example Usage
 
@@ -106,6 +110,27 @@ The service is deployed at: https://bitespeed-identity-service-dxom.onrender.com
 curl -X POST https://bitespeed-identity-service-dxom.onrender.com/identify \
   -H "Content-Type: application/json" \
   -d '{"email":"mcfly@hillvalley.edu","phoneNumber":"123456"}'
+```
+
+### Test the API
+
+You can test all the scenarios from the requirements:
+
+```bash
+# Test 1: New customer
+curl -X POST https://bitespeed-identity-service-dxom.onrender.com/identify \
+  -H "Content-Type: application/json" \
+  -d '{"email":"lorraine@hillvalley.edu","phoneNumber":"123456"}'
+
+# Test 2: Same phone, new email (creates secondary contact)
+curl -X POST https://bitespeed-identity-service-dxom.onrender.com/identify \
+  -H "Content-Type: application/json" \
+  -d '{"email":"mcfly@hillvalley.edu","phoneNumber":"123456"}'
+
+# Test 3: Linking two primary contacts
+curl -X POST https://bitespeed-identity-service-dxom.onrender.com/identify \
+  -H "Content-Type: application/json" \
+  -d '{"email":"george@hillvalley.edu","phoneNumber":"717171"}'
 ```
 
 ## How It Works
