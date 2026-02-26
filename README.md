@@ -98,12 +98,12 @@ CREATE TABLE Contact (
 
 ## Deployment
 
-The service is deployed at: [Your deployment URL here]
+The service is deployed at: https://bitespeed-identity-service-dxom.onrender.com
 
 ## Example Usage
 
 ```bash
-curl -X POST https://your-deployment-url.com/identify \
+curl -X POST https://bitespeed-identity-service-dxom.onrender.com/identify \
   -H "Content-Type: application/json" \
   -d '{"email":"mcfly@hillvalley.edu","phoneNumber":"123456"}'
 ```
