@@ -21,8 +21,11 @@ export interface Contact {
 export const initDatabase = async () => {
   const client = await pool.connect();
   try {
+    // Drop existing table if it has wrong schema
+    await client.query(`DROP TABLE IF EXISTS Contact CASCADE`);
+    
     await client.query(`
-      CREATE TABLE IF NOT EXISTS Contact (
+      CREATE TABLE Contact (
         id SERIAL PRIMARY KEY,
         "phoneNumber" VARCHAR(255),
         email VARCHAR(255),
